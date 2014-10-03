@@ -1,7 +1,7 @@
 (ns instagenerate.core
   (:refer-clojure :exclude [record? ==])
-  (:use instaparse.core
-        clojure.core.logic))
+  (:require [instaparse.core :as insta])
+  (:use clojure.core.logic))
 
 (defn has-tag?
   [combinator]
@@ -146,15 +146,28 @@
   [combinator grammar strings parse-tree]
   (partial-parseo combinator grammar strings parse-tree () ()))
 
+(defn instaparseo
+  [instaparser strings parse-tree]
+  (full-parseo (get (:grammar instaparser) (:start-production instaparser))
+               (:grammar instaparser)
+               strings parse-tree))
+
 (defn generate-strings-for-parse-tree
   [instaparser parse-tree & [n]]
   (let [grammar (:grammar instaparser)]
-    (run (or n 1) [q]
-         (full-parseo (get grammar (:start-production instaparser)) grammar q parse-tree))))
+    (if-not n
+      (run* [q]
+            (full-parseo (get grammar (:start-production instaparser)) grammar q parse-tree))
+      (run n [q]
+           (full-parseo (get grammar (:start-production instaparser)) grammar q parse-tree)))))
 
 (defn generate-possible-strings
   [instaparser & [n]]
   (let [grammar (:grammar instaparser)]
-    (run (or n 1) [q]
-         (fresh [pt]
-                (full-parseo (get grammar (:start-production instaparser)) grammar q pt)))))
+    (if-not n
+      (run* [q]
+            (fresh [pt]
+                  (full-parseo (get grammar (:start-production instaparser)) grammar q pt)))
+      (run (or n 1) [q]
+           (fresh [pt]
+                  (full-parseo (get grammar (:start-production instaparser)) grammar q pt))))))
