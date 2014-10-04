@@ -154,6 +154,8 @@
                strings parse-tree))
 
 (defn generate-strings-for-parse-tree
+  "Given a parser and a parse tree, returns the first n (or all) possible strings
+that will return that parse tree. Could be infinite."
   [instaparser parse-tree & [n]]
   (let [grammar (:grammar instaparser)]
     (if-not n
@@ -163,6 +165,8 @@
            (full-parseo (get grammar (:start-production instaparser)) grammar q parse-tree)))))
 
 (defn generate-possible-strings
+  "Given a parser, returns the first n (or all) possible strings that can be parsed
+by the parser. Could be infinite."
   [instaparser & [n]]
   (let [grammar (:grammar instaparser)]
     (if-not n
