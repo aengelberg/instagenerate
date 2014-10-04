@@ -1,6 +1,7 @@
 (ns instagenerate.core
   (:refer-clojure :exclude [record? ==])
-  (:require [instaparse.core :as insta])
+  (:require [instaparse.core :as insta]
+            [instaparse.combinators :as comb])
   (:use clojure.core.logic))
 
 (defn has-tag?
@@ -23,7 +24,7 @@
 (defmethod combinator-parseo :string
   [{s :string :keys [hide]} grammar strings parse-tree remaining-strings remaining-parse-tree]
   (fresh []
-         (conso s remaining-strings strings)
+         (== strings (reduce #(lcons %2 %1) remaining-strings (reverse s)))
          (if-not hide
            (conso s remaining-parse-tree parse-tree)
            (== remaining-parse-tree parse-tree))))
@@ -61,7 +62,7 @@
     (cond
       (empty? combs) (fresh []
                             (== strings remaining-strings)
-                            (emptyo parse-tree))
+                            (== parse-tree remaining-parse-tree))
       :else (fresh [rem-strings0 rem-pt0]
                    (partial-parseo (first combs)
                                    grammar strings parse-tree rem-strings0 rem-pt0)
@@ -117,7 +118,7 @@
 (defmethod combinator-parseo :look
   [{comb :parser :keys [hide] :as combinator} grammar strings parse-tree remaining-strings remaining-parse-tree]
   (let [comb (assoc comb :hide true)]
-    (fresh [fake-remaining-parse-tree fake-remaining-strings]
+    (fresh [fake-remaining-strings]
            (== strings remaining-strings)
            (== parse-tree remaining-parse-tree)
            (partial-parseo comb grammar strings parse-tree fake-remaining-strings parse-tree))))
