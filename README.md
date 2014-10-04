@@ -67,8 +67,7 @@ There are two included functions that use the core.logic constraint above:
 
 ## Problems / things to note
 
-- Negative lookahead and ordered choice are not implemented, because both concepts
-are difficult to reason about in core.logic.
+- Negative lookahead, ordered choice, and regular expressions are currently not yet implemented.
 - If a parser is recursive in an obnoxious way (e.g. `S = S`), instagenerate will not catch
 that, and it will result in an infinite loop.
 - It is recommended that you check that your parser and inputs/outputs you pass to
