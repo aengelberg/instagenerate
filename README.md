@@ -78,6 +78,6 @@ parser recursion will throw the solver into an infinite loop if a solution is un
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014
 
 Distributed under the Eclipse Public License, the same as Clojure.
