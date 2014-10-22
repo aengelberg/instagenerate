@@ -66,7 +66,7 @@
       :else (fresh [rem-strings0 rem-pt0]
                    (partial-parseo (first combs)
                                    grammar strings parse-tree rem-strings0 rem-pt0)
-                   (partial-parseo (update combinator :parsers rest)
+                   (partial-parseo (update-in combinator [:parsers] rest)
                                    grammar rem-strings0 rem-pt0 remaining-strings remaining-parse-tree)))))
 
 (defmethod combinator-parseo :alt
@@ -80,7 +80,7 @@
       (empty? combs) u#
       :else (conde
               [(partial-parseo (first combs) grammar strings parse-tree remaining-strings remaining-parse-tree)]
-              [(partial-parseo (update combinator :parsers rest) grammar strings parse-tree remaining-strings remaining-parse-tree)]))))
+              [(partial-parseo (update-in combinator [:parsers] rest) grammar strings parse-tree remaining-strings remaining-parse-tree)]))))
 
 (defmethod combinator-parseo :star
   [{comb :parser :keys [hide] :as combinator} grammar strings parse-tree remaining-strings remaining-parse-tree]
