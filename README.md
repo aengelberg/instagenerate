@@ -22,12 +22,6 @@ constrains a string to a parse tree.
 	 [(\a \b \c \c) (:S "ab" (:C "c" "c"))]
 	 [(\a \b \c \c \c) (:S "ab" (:C "c" "c" "c"))])
 
-Note that in this model, the "input" is actually a list of strings, and each string is a
-chunk of characters that is parsed in each "string" combinator. This turns out
-to not be a problem because we typically would use this model to _generate_ strings rather than
-consume them, and once they are generated it's trivial to just append them together with
-`(apply str)`.
-
 With this model it's simple to ask what strings can be generated with a given parser (essentially
 we just ignore the output):
 
